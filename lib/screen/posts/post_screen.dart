@@ -4,20 +4,20 @@ import 'package:post_api/screen/posts/create_post.dart';
 import 'package:provider/provider.dart';
 
 class PostScreen extends StatefulWidget {
-  const PostScreen({super.key});
+  const PostScreen({Key? key}) : super(key: key);
 
   @override
-  State<PostScreen> createState() => _PostScreenState();
+  PostScreenState createState() => PostScreenState();
 }
 
-class _PostScreenState extends State<PostScreen> {
+class PostScreenState extends State<PostScreen> {
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<PostProvider>(context, listen: false);
       provider.getPosts();
     });
-    super.initState();
   }
 
   @override
@@ -43,7 +43,6 @@ class _PostScreenState extends State<PostScreen> {
                 itemCount: posts.length + 1,
                 itemBuilder: (context, index) {
                   if (index == 0) {
-                    const SizedBox(height: 7.0);
                     return ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(
@@ -73,7 +72,7 @@ class _PostScreenState extends State<PostScreen> {
                           children: [
                             IconButton(
                               onPressed: () {
-                                // log();
+                                // Add edit action logic here
                               },
                               icon: Icon(
                                 Icons.edit,
@@ -81,7 +80,9 @@ class _PostScreenState extends State<PostScreen> {
                               ),
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                // Add delete action logic here
+                              },
                               icon: Icon(
                                 Icons.delete,
                                 color: Colors.red[300],

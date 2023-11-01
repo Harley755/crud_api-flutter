@@ -21,14 +21,14 @@ class _CreatePostState extends State<CreatePost> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<UserProvider>(context, listen: false);
-      provider.getUsers().then((_) {
-        if (provider.users.isNotEmpty) {
+      if (provider.users.isEmpty) {
+        provider.getUsers().then((_) {
           setState(() {
             selectedUser = provider.users[0].id
                 .toString(); // Assuming 'id' is the field you want to assign to 'selectedUser'
           });
-        }
-      });
+        });
+      }
     });
     super.initState();
   }
@@ -46,11 +46,12 @@ class _CreatePostState extends State<CreatePost> {
 
   String title = "";
   String body = "";
-  String selectedUser = "";
+  late String? selectedUser = "";
 
   @override
   Widget build(BuildContext context) {
-    var users = context.watch<UserProvider>().users;
+    var users = context.read<UserProvider>().users;
+    var isLoading = context.watch<UserProvider>().isLoading;
     return Scaffold(
       appBar: AppBar(
         title: const Text('CREATE POST'),
@@ -117,28 +118,35 @@ class _CreatePostState extends State<CreatePost> {
               const SizedBox(height: 22.0),
 
               // USER
-              DropdownButtonFormField(
-                value: selectedUser,
-                items: users.map((User e) {
-                  return DropdownMenuItem<String>(
-                    value: e.id.toString(),
-                    child: Text(e.name),
-                  );
-                }).toList(),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                  ),
-                ),
-                onChanged: (String? value) {
-                  setState(() {
-                    selectedUser = value!;
-                  });
-                },
-                onSaved: (value) {
-                  selectedUser = value!;
-                },
-              ),
+              isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : DropdownButtonFormField(
+                      value: null,
+                      items: users
+                          .map((User e) {
+                            return DropdownMenuItem<String>(
+                              value: e.id.toString(),
+                              child: Text(e.name),
+                            );
+                          })
+                          .toSet()
+                          .toList(),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedUser = value!;
+                        });
+                      },
+                      onSaved: (value) {
+                        selectedUser = value!;
+                      },
+                    ),
 
               const SizedBox(height: 22.0),
 
@@ -162,7 +170,7 @@ class _CreatePostState extends State<CreatePost> {
       context.read<PostProvider>().create(
             title: _titleController.text,
             body: _bodyController.text,
-            userId: selectedUser,
+            userId: selectedUser!,
           );
       Navigator.pushAndRemoveUntil(
           context,
