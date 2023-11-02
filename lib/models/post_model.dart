@@ -38,11 +38,21 @@ class Post {
 
 abstract class PostMethods {
   getAll();
+
   createPost({
     required String title,
     required String body,
     required userId,
   });
-  updatePost(int idPost);
+
+  getPost({required int idPost});
+
+  updatePost({
+    required int idPost,
+    required String title,
+    required String body,
+    required userId,
+  });
+
   deletePost(int idPost);
 }

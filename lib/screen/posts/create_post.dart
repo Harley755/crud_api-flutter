@@ -21,6 +21,7 @@ class _CreatePostState extends State<CreatePost> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<UserProvider>(context, listen: false);
+
       if (provider.users.isEmpty) {
         provider.getUsers().then((_) {
           setState(() {
@@ -54,7 +55,7 @@ class _CreatePostState extends State<CreatePost> {
     var isLoading = context.watch<UserProvider>().isLoading;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CREATE POST'),
+        title: const Text('EDIT POST'),
         centerTitle: true,
       ),
       body: Padding(

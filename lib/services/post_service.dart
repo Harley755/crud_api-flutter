@@ -9,7 +9,7 @@ class PostService implements PostMethods {
     var url = dotenv.env['GET_POST_URL'];
     var uri = Uri.parse(url!);
     var response = await http.get(uri);
-    print("response : " + response.body);
+    print("response : ${response.body}");
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body) as List;
       final post = json
@@ -41,21 +41,21 @@ class PostService implements PostMethods {
       'userId': userId,
     });
     if (response.statusCode == 201) {
-      print("response create Post : " + response.body);
+      print("response create Post : ${response.body}");
     } else {
-      print("Erreur d'enregistrement : " + response.body);
+      print("Erreur d'enregistrement : ${response.body}");
     }
   }
 
   @override
-  updatePost(int idPost) async {
-    var url = dotenv.env['UPDATE_POST_URL']!.replaceFirst(
+  getPost({required int idPost}) async {
+    var url = dotenv.env['EDIT_POST_URL']!.replaceFirst(
       ':id',
       idPost.toString(),
     );
     var uri = Uri.parse(url);
-    var response = await http.put(uri);
-    print("response : " + response.body);
+    var response = await http.get(uri);
+    print("response One Post : ${response.body}");
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body) as List;
       final post = json
@@ -71,6 +71,30 @@ class PostService implements PostMethods {
       return post;
     }
     return [];
+  }
+
+  @override
+  updatePost({
+    required int idPost,
+    required String title,
+    required String body,
+    required userId,
+  }) async {
+    var url = dotenv.env['UPDATE_POST_URL']!.replaceFirst(
+      ':id',
+      idPost.toString(),
+    );
+    var uri = Uri.parse(url);
+    var response = await http.put(uri, body: {
+      'title': title,
+      'body': body,
+      'userId': userId,
+    });
+    print("response update code : ${response.statusCode}");
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
   }
 
   @override

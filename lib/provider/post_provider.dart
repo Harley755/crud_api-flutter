@@ -33,4 +33,34 @@ class PostProvider extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
   }
+
+  getOne({
+    required postId,
+  }) async {
+    isLoading = true;
+    notifyListeners();
+    final res = await service.getPost(idPost: postId);
+    log("e get One : $res");
+    isLoading = false;
+    notifyListeners();
+  }
+
+  update({
+    required postId,
+    required String title,
+    required String body,
+    required userId,
+  }) async {
+    isLoading = true;
+    notifyListeners();
+    final res = await service.updatePost(
+      title: title,
+      body: body,
+      userId: userId,
+      idPost: postId,
+    );
+    log("e update : $res");
+    isLoading = false;
+    notifyListeners();
+  }
 }

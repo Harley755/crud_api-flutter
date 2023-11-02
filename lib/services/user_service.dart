@@ -10,7 +10,7 @@ class UserService implements UserMethods {
     var url = dotenv.env['GET_USER_URL'];
     var uri = Uri.parse(url!);
     var response = await http.get(uri);
-    print("response User : " + response.body);
+    print("response User : ${response.body}");
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body) as List;
       final user = json

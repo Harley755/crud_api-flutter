@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:post_api/provider/post_provider.dart';
 import 'package:post_api/screen/posts/create_post.dart';
+import 'package:post_api/screen/posts/edit_post.dart';
 import 'package:provider/provider.dart';
 
 class PostScreen extends StatefulWidget {
@@ -72,7 +73,11 @@ class PostScreenState extends State<PostScreen> {
                           children: [
                             IconButton(
                               onPressed: () {
-                                // Add edit action logic here
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => EditPost(
+                                    post: post,
+                                  ),
+                                ));
                               },
                               icon: Icon(
                                 Icons.edit,
