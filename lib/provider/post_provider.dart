@@ -63,4 +63,13 @@ class PostProvider extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
   }
+
+  delete({required postId}) async {
+    isLoading = true;
+    notifyListeners();
+    final res = await service.deletePost(idPost: postId);
+    log("e update : $res");
+    isLoading = false;
+    notifyListeners();
+  }
 }

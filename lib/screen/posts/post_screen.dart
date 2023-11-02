@@ -86,7 +86,12 @@ class PostScreenState extends State<PostScreen> {
                             ),
                             IconButton(
                               onPressed: () {
-                                // Add delete action logic here
+                                context
+                                    .read<PostProvider>()
+                                    .delete(postId: post.id);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const PostScreen(),
+                                ));
                               },
                               icon: Icon(
                                 Icons.delete,

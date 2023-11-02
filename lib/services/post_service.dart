@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:post_api/models/post_model.dart';
@@ -84,6 +85,7 @@ class PostService implements PostMethods {
       ':id',
       idPost.toString(),
     );
+    log("Url " + url.toString());
     var uri = Uri.parse(url);
     var response = await http.put(uri, body: {
       'title': title,
@@ -98,8 +100,18 @@ class PostService implements PostMethods {
   }
 
   @override
-  deletePost(int idPost) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
+  deletePost({required int idPost}) async {
+    var url = dotenv.env['UPDATE_POST_URL']!.replaceFirst(
+      ':id',
+      idPost.toString(),
+    );
+    log("Url " + url.toString());
+    var uri = Uri.parse(url);
+    var response = await http.delete(uri);
+    print("response delete code : ${response.statusCode}");
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
   }
 }

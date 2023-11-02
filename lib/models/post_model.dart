@@ -54,5 +54,5 @@ abstract class PostMethods {
     required userId,
   });
 
-  deletePost(int idPost);
+  deletePost({required int idPost});
 }
